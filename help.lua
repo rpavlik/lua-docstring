@@ -187,8 +187,18 @@ end
 
 --[[ Luabind support ]]
 local function luabindHelp(obj)
+	local knownTypes = {
+		["userdata"] = true,
+		["table"] = true,
+		["string"] = true,
+		["number"] = true,
+		["function"] = true,
+		["thread"] = true,
+		["nil"] = true
+	}
 	local h = class_info(obj)
-	if h.name == "userdata" then
+	-- don't claim to know about basic types
+	if knownTypes[h.name] then
 		return nil
 	else
 		return { class = h.name,
