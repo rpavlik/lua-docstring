@@ -189,4 +189,14 @@ function test_selfdoc_complete()
 	end
 end
 
+function test_nodoc_builtins()
+	require("help")
+	assert_nil(help.lookup(1), "Don't document generic numbers!")
+	assert_nil(help.lookup({}), "Don't document generic tables!")
+	assert_nil(help.lookup(nil), "Don't document nil!")
+	assert_nil(help.lookup("blabla"), "Don't document generic strings!")
+	assert_nil(help.lookup(function() end), "Don't document generic functions!")
+	assert_nil(help.lookup(coroutine.create(function() end)), "Don't document generic coroutines!")
+end
+
 lunatest.run()
