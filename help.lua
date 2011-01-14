@@ -74,7 +74,8 @@ local function tableExtend(dest, src)
 end
 
 function mt:__call(...)
-	if arg.n == 0 then
+	local arg = {...}
+	if #arg == 0 then
 		print("help(obj) - call to learn information about a particular object or value.")
 		return
 	end
