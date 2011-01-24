@@ -189,6 +189,13 @@ function test_selfdoc_complete()
 	end
 end
 
+function test_selfdoc_gc()
+	require("help")
+	collectgarbage("collect")
+	assert_gt(#help, 1)
+	assert_not_nil(help.lookup(help), "The help table has no documentation following garbage collection!")
+end
+
 function test_nodoc_builtins()
 	require("help")
 	assert_nil(help.lookup(1), "Don't document generic numbers!")
