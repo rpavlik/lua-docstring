@@ -37,7 +37,7 @@ DEALINGS IN THE SOFTWARE.
 
 local mt = {}
 help = setmetatable({}, mt)
-local docstrings = setmetatable({}, {__mode = "kv"})
+local docstrings = setmetatable({}, {__mode = "k"})
 local helpExtensions = {}
 
 local function tableExtend(dest, src)
