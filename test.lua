@@ -62,7 +62,7 @@ function test_call_chain()
 	assert_function(a)
 	assert_string(a())
 	assert_string(help.lookup(a))
-	
+
 	assert_function(b)
 	assert_number(b())
 	assert_string(help.lookup(b))
@@ -122,7 +122,7 @@ function test_applyto_chain()
 	assert_function(a)
 	assert_string(a())
 	assert_string(help.lookup(a))
-	
+
 	assert_function(b)
 	assert_number(b())
 	assert_string(help.lookup(b))
@@ -170,13 +170,13 @@ function test_selfdoc_list_of_functions()
 		table.insert(keys, k)
 		foundKeys[k] = false
 	end
-	
+
 	for _,v in ipairs(help.lookup(help)["functions"]) do
 		assert_not_nil(foundKeys[v], "Function listed in documentation does not exist: " .. v)
 		assert_false(foundKeys[v], "Function is listed in documentation more than once: " .. v)
 		foundKeys[v] = true
 	end
-	
+
 	for k,v in pairs(foundKeys) do
 		assert_true(v, "Functions not listed in documentation for help: " .. k)
 	end
