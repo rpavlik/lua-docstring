@@ -89,7 +89,7 @@ end
 function mt:__call(...)
 	local arg = {...}
 	if #arg == 0 then
-		print("help(obj) - call to learn information about a particular object or value.")
+		help.print("help(obj) - call to learn information about a particular object or value.")
 		return
 	end
 	for i,obj in ipairs(arg) do
@@ -98,14 +98,14 @@ function mt:__call(...)
 		if i == 1 then
 			helpHeader = "Help:\t"
 		else
-			print("")
+			help.print("")
 			helpHeader = string.format("Help (#%d):\t", i)
 		end
 		if helpContent then
-			print(helpHeader .. help.formatHelp(helpContent))
+			help.print(helpHeader .. help.formatHelp(helpContent))
 		else
-			print(helpHeader .. "type(obj) = " .. type(obj))
-			print("No further help available!")
+			help.print(helpHeader .. "type(obj) = " .. type(obj))
+			help.print("No further help available!")
 		end
 	end
 end
@@ -136,6 +136,14 @@ function help.formatHelp(h)
 		return str
 	else
 		return h
+	end
+end
+
+function help.setPrint(func)
+	if func == nil then
+		 help.print = _G.print
+    else
+		 help.print = func
 	end
 end
 
@@ -227,7 +235,7 @@ function help.supportLuabind()
 	end
 	help.addHelpExtension(luabindHelp)
 	help.supportLuabind = function()
-		print("Luabind help support already enabled!")
+		help.print("Luabind help support already enabled!")
 	end
 end
 
@@ -296,7 +304,7 @@ function help.supportOsgLua()
 	Saves the given object to the named file]].applyTo(osgLua.saveObjectFile)
 	
 	help.supportOsgLua = function()
-		print("osgLua help support already enabled!")
+		help.print("osgLua help support already enabled!")
 	end
 end
 
@@ -406,7 +414,7 @@ do
 		local level = level or 1
 		local ret = {}
 		
-		print(string.format("Documenting %s at level %d", name, level))
+		help.print(string.format("Documenting %s at level %d", name, level))
 		
 		table.insert(ret, string.format("<h%d>%s</h%d>", level, name, level))
 		table.insert(ret, formatAsHTML(help.lookup(entity), level + 1))
@@ -466,6 +474,7 @@ your objects. Try help(help.docstring) for info.
 	functions = {
 		"docstring",
 		"lookup",
+		"setPrint",
 		"addHelpExtension",
 		"formatHelp",
 		"supportLuabind",
@@ -476,6 +485,10 @@ your objects. Try help(help.docstring) for info.
 	},
 
 }.applyTo(help)
+
+
+-- Set the function for printing, by default this is _G.print
+help.print = _G.print
 
 -- Document help extensions
 help.docstring[==[
@@ -492,6 +505,15 @@ Convert a value, such as that returned by help.lookup, into some
 formatted string.  The default implementation, used by help(),
 is optimized for on-screen display.
 ]==].applyTo(help.formatHelp)
+
+-- Document setPrint
+help.docstring[==[
+Change the function used by help when printing the textual
+information from help().  By default help() uses the print
+function defined globally in lua.  Changing this function can be
+useful for redirecting the output of help to a user-defined
+function.
+]==].applyTo(help.setPrint)
 
 -- Document lookup
 help.docstring[==[
